@@ -1,0 +1,4 @@
+#版本控制
+spring:
+  profiles:
+    active: dev

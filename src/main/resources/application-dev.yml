@@ -1,0 +1,24 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 18082
+#扫描mybatis mapper xml文件
+mybatis-plus:
+  mapper-locations: classpath*:/mybatis/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#模板引擎
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/procurement_project?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+logging:
+  file:
+    path: D:/log/partset
+
+
+
+

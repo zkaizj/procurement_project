@@ -1,6 +1,6 @@
 package com.zk.subClass.service;
 
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.zk.subClass.bean.*;
 import com.zk.subClass.util.ResultVo;
 

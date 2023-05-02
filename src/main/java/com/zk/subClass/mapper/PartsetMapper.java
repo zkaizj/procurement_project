@@ -1,6 +1,7 @@
 package com.zk.subClass.mapper;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zk.subClass.bean.AddSubClassVo;
 import com.zk.subClass.bean.Partset;
 import com.zk.subClass.bean.PartsetVo;
@@ -10,6 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
+
 public interface PartsetMapper extends BaseMapper<Partset> {
 
    // List<PartsetVo> selectAllPageset(PartsetVo partsetVo);

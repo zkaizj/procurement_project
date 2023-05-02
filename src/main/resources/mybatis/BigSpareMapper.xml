@@ -2,53 +2,36 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zk.subClass.mapper.PartsetMapper">
+<mapper namespace="com.zk.subClass.mapper.BigSpareMapper">
 
-    <resultMap id="BaseResultMap" type="com.zk.subClass.bean.Partset">
+    <resultMap id="BaseResultMap" type="com.zk.subClass.bean.BigSpare">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="code" column="code" jdbcType="VARCHAR"/>
-            <result property="remark" column="remark" jdbcType="VARCHAR"/>
-            <result property="status" column="status" jdbcType="BOOLEAN"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
             <result property="version" column="version" jdbcType="INTEGER"/>
             <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
             <result property="createPeople" column="create_people" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
             <result property="modifyDate" column="modify_date" jdbcType="TIMESTAMP"/>
             <result property="modifyPeople" column="modify_people" jdbcType="VARCHAR"/>
+            <result property="detailed" column="modify_people" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,name,code,
-        remark,status,version,
-        create_date,create_people,modify_date,
-        modify_people
+        status,version,create_date,
+        create_people,modify_date,modify_people,detailed
     </sql>
-    <insert id="addPartset">
-        insert into partset( name, code, remark, status, version, create_date, create_people)
-        values (#{name},#{ code},#{ remark},#{ status},0,sysdate(),#{ createPeople})
+    <insert id="saveBigSpare">
+        insert into big_spare (name,code,create_date,create_people,version,status)
+        values(#{name},#{code},sysdate(),#{createPeople},0,1)
     </insert>
-    <update id="updateStatusById">
-        update partset set status=#{status},modify_people=#{modifyPeople},modify_date=#{modifyDate},
-                           version=version+1
-        where id=#{id} and version=#{version}
+    <update id="updateStatus">
+        update big_spare set status=#{status},modify_date=sysdate(),modify_people=#{modify_people}  where id=#{id}
     </update>
-    <update id="modifySubClass">
-        update partset
-            <set>
-               <if test="status!=null and status!=''">
-                   status=#{status},
-               </if>
-            <if test="remark!=null and remark!=''">
-                remark=#{remark},
-            </if>
-            modify_people=#{modifyPeople},
-            modify_date=#{modifyDate},
-            version=version+1
-            </set>
-            where id=#{id}
-    </update>
-    <select id="selectAllPageset" resultMap="BaseResultMap">
-        select  id,name,code,remark,status,version from partset
+    <select id="queryAllBigSpares" resultType="com.zk.subClass.bean.BigSpare">
+        select  id,name,code,remark,status,detailed,version from big_spare
         <where>
             <if test="code!=null and code!=''">
                 and code like concat('%',#{code},'%')
@@ -63,8 +46,8 @@
         order by id
         limit #{offset},#{pageSize}
     </select>
-    <select id="selectAllPagesetCount" resultType="java.lang.Integer">
-        select  count(id) from partset
+    <select id="queryAllBigSparesCount" resultType="java.lang.Integer">
+        select  count(id) from big_spare
         <where>
             <if test="code!=null and code!=''">
                 and code like concat('%',#{code},'%')
@@ -77,11 +60,4 @@
             </if>
         </where>
     </select>
-    <select id="selectCode" resultMap="BaseResultMap">
-        select * from partset where code=#{code}
-    </select>
-    <select id="selectName" resultMap="BaseResultMap">
-        select * from partset where name=#{name}
-    </select>
-
 </mapper>

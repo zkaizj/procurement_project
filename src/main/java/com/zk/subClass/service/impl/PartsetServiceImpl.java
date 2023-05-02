@@ -1,6 +1,7 @@
 package com.zk.subClass.service.impl;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zk.subClass.bean.*;
 import com.zk.subClass.mapper.PartsetMapper;
 import com.zk.subClass.service.PartsetService;
@@ -17,7 +18,7 @@ import java.util.List;
  * @description PartsetServiceImpl
  */
 @Service
-public class PartsetServiceImpl extends ServiceImpl<PartsetMapper,Partset> implements PartsetService {
+public class PartsetServiceImpl extends ServiceImpl<PartsetMapper, Partset> implements PartsetService {
     @Autowired
     private PartsetMapper partsetMapper;
 
@@ -28,6 +29,7 @@ public class PartsetServiceImpl extends ServiceImpl<PartsetMapper,Partset> imple
         //添加备件小类
         addSubClassVo.setCreatePeople("zk");
         //查询编码是否重复
+
         Partset partset1=partsetMapper.selectCode(addSubClassVo.getCode());
         if (partset1!=null)
         {

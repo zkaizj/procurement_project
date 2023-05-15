@@ -1,10 +1,8 @@
 package com.zk.subClass.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zk.subClass.bean.AddBigSpare;
-import com.zk.subClass.bean.BigSpare;
-import com.zk.subClass.bean.PageVo;
-import com.zk.subClass.util.ResultVo;
+import com.zk.subClass.bean.*;
+import com.zk.commen.util.ResultVo;
 
 import java.util.Map;
 
@@ -15,7 +13,9 @@ import java.util.Map;
 */
 public interface BigSpareService extends IService<BigSpare> {
     public ResultVo addBigSpare(AddBigSpare addBigSpare);
-    public PageVo<BigSpare> queryAllBigSpares(Map<String, Object> map);
+    public PageVo<BigSpare> queryAllBigSpares(BigSpareVo bigSpareVo);
 
     boolean updateStatus(Map<String, Object> map);
+
+    ResultVo updateBigSpare(UpdateBigSpareVo updateBigSpare);
 }

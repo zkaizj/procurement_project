@@ -2,8 +2,7 @@ package com.zk.subClass.controller;
 
 import com.zk.subClass.bean.*;
 import com.zk.subClass.service.PartsetService;
-import com.zk.subClass.util.ResultVo;
-import org.apache.ibatis.annotations.Param;
+import com.zk.commen.util.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -50,9 +49,9 @@ public class PartsetController {
 
     }
     //修改备件小类信息
-    @PostMapping("/modifySubClass")
+    @PostMapping("/update")
     public ResultVo updateSubClass(@RequestBody UpDateSubClassVo upDateSubClassVo) {
-        boolean tag = partsetService.modifySubClass(upDateSubClassVo);
-        return ResultVo.success(tag);
+
+        return partsetService.modifySubClass(upDateSubClassVo);
     }
 }

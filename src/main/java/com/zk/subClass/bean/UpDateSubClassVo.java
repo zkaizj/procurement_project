@@ -26,4 +26,6 @@ public class UpDateSubClassVo {
     private String modifyPeople;
 
     private Date modifyDate;
+
+    private Integer version;
 }

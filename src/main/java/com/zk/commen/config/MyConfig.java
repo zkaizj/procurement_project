@@ -1,4 +1,4 @@
-package com.zk.subClass.config;
+package com.zk.commen.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;

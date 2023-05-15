@@ -7,6 +7,7 @@ import com.zk.subClass.bean.Partset;
 import com.zk.subClass.bean.PartsetVo;
 import com.zk.subClass.bean.UpDateSubClassVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -30,6 +31,12 @@ public interface PartsetMapper extends BaseMapper<Partset> {
     Partset selectCode(String code);
 
     Partset selectName(String code);
+
+    Integer selectVersionById(Integer id);
+
+    Boolean selectStatusById(Integer id);
+
+    int selectPartNameById(@Param("id") Integer id,@Param("name") String name);
 
 
 //    int selectPartCode(String partCode);

@@ -1,10 +1,8 @@
 package com.zk.subClass.controller;
 
-import com.zk.subClass.bean.AddBigSpare;
-import com.zk.subClass.bean.BigSpare;
-import com.zk.subClass.bean.PageVo;
+import com.zk.subClass.bean.*;
 import com.zk.subClass.service.BigSpareService;
-import com.zk.subClass.util.ResultVo;
+import com.zk.commen.util.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +23,8 @@ public class BigSpareController {
     private BigSpareService bigSpareService;
     //分页条件查询
     @PostMapping("/queryPage")
-    public ResultVo queryPage(@RequestBody Map<String,Object> map){
-        PageVo<BigSpare> bigSparePageVo = bigSpareService.queryAllBigSpares(map);
+    public ResultVo queryPage(@RequestBody BigSpareVo bigSpareVo){
+        PageVo<BigSpare> bigSparePageVo = bigSpareService.queryAllBigSpares(bigSpareVo);
 
         return ResultVo.success(bigSparePageVo);
     }
@@ -52,5 +50,17 @@ public class BigSpareController {
             return ResultVo.success(tag);
         }
         return ResultVo.error("修改失败，请重试!");
+    }
+
+    //修改备件大类信息
+    @PostMapping("/update")
+    public ResultVo updateBigSpare(@RequestBody UpdateBigSpareVo updateBigSpare ,BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return ResultVo.error(bindingResult.getFieldError().getDefaultMessage());
+        }
+            ResultVo resultVo = bigSpareService.updateBigSpare(updateBigSpare);
+            return resultVo;
+
+
     }
 }

@@ -21,30 +21,39 @@
     <sql id="Base_Column_List">
         id,name,code,
         status,version,create_date,
-        create_people,modify_date,modify_people,detailed
+        create_people,modify_date,modify_people
     </sql>
     <insert id="saveBigSpare">
         insert into big_spare (name,code,create_date,create_people,version,status)
         values(#{name},#{code},sysdate(),#{createPeople},0,1)
     </insert>
     <update id="updateStatus">
-        update big_spare set status=#{status},modify_date=sysdate(),modify_people=#{modify_people}  where id=#{id}
+        update big_spare set status=#{status},modify_date=sysdate(),modify_people=#{modify_people}
+        ,version=version+1
+        where id=#{id}
     </update>
-    <select id="queryAllBigSpares" resultType="com.zk.subClass.bean.BigSpare">
-        select  id,name,code,remark,status,detailed,version from big_spare
-        <where>
-            <if test="code!=null and code!=''">
-                and code like concat('%',#{code},'%')
+    <update id="updateBigSpare">
+            update big_spare
+        <set>
+            <if test="status!=null ">
+                status=#{status},
             </if>
-            <if test="name!=null and name!=''">
-                and name  like concat('%',#{name},'%')
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
             </if>
-            <if test="status!=null and status!=''">
-                and status like concat('%',#{status},'%')
+            <if test=" name!=null and name!=''">
+                name=#{name},
             </if>
-        </where>
-        order by id
-        limit #{offset},#{pageSize}
+            modify_people=#{modifyPeople},
+            modify_date=#{modifyDate},
+            version=version+1
+        </set>
+        where id=#{id} and version=#{version}
+    </update>
+
+
+    <select id="selectVersion" resultType="java.lang.Integer">
+        select version from big_spare where id=#{id}
     </select>
     <select id="queryAllBigSparesCount" resultType="java.lang.Integer">
         select  count(id) from big_spare
@@ -55,9 +64,31 @@
             <if test="name!=null and name!=''">
                 and name  like concat('%',#{name},'%')
             </if>
-            <if test="status!=null and status!=''">
-                and status like concat('%',#{status},'%')
+            <if test="status!=null ">
+                and status=#{status}
             </if>
         </where>
+    </select>
+    <select id="queryAllBigSpares" resultType="com.zk.subClass.bean.BigSpare">
+        select  id,name,code,remark,status,version from big_spare
+        <where>
+            <if test="code!=null and code!=''">
+                and code like concat('%',#{code},'%')
+            </if>
+            <if test="name!=null and name!=''">
+                and name  like concat('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                and status=#{status}
+            </if>
+        </where>
+        order by create_date
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="selectStatus" resultType="java.lang.Boolean">
+        select status from big_spare where id=#{id}
+    </select>
+    <select id="selectNameGT0" resultType="java.lang.Integer">
+        select Count(*) from big_spare where id!=#{id} and name=#{name}
     </select>
 </mapper>

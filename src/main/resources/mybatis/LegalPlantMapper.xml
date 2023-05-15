@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.legalPlant.mapper.LegalPlantMapper">
+
+    <resultMap id="BaseResultMap" type="com.zk.legalPlant.bean.LegalPlant">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="legalPlantCode" column="legal_plant_code" jdbcType="VARCHAR"/>
+            <result property="legalPlantDec" column="legal_plant_dec" jdbcType="VARCHAR"/>
+            <result property="enabled" column="status" jdbcType="INTEGER"/>
+            <result property="legalPersonCode" column="legal_person_code" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createPeople" column="create_people" jdbcType="VARCHAR"/>
+            <result property="modifyPeople" column="modify_people" jdbcType="VARCHAR"/>
+            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,legal_plant_code,legal_plant_dec,
+        status,legal_person_code,create_time,
+        create_people,modify_people,modify_time,
+        version
+    </sql>
+    <insert id="insertLegalPlant">
+        insert into legal_plant(legal_plant_code,legal_plant_dec,
+                                status,legal_person_code,create_time,
+                                create_people,modify_people,modify_time,
+                                version) values (#{legalPlantCode},#{legalPlantDec},#{
+                                enabled},#{legalPersonCode},sysdate(),#{
+                                createPeople},#{modifyPeople},sysdate(),0)
+    </insert>
+    <update id="updateStatus">
+        update legal_plant set status=#{enabled},modify_people=#{modifyPeople},modify_time=sysdate(),version=version+1
+        where id=#{id}
+    </update>
+    <update id="updateLegalPlant">
+        update legal_plant
+        <set>
+            <if test="legalPlantDec!=null and legalPlantDec!=''">
+                legal_plant_dec=#{legalPlantDec},
+            </if>
+            status=#{enabled},
+            version=version+1,
+            modify_people=#{modifyPeople},
+            modify_time=sysdate()
+        </set>
+        where id=#{id} and version=#{version}
+    </update>
+    <select id="queryLegalPerson" resultType="com.zk.legalPlant.bean.LegalPerson">
+        select legal_person_code as legalPersonCode,legal_person_name as legalPersonName,id from legal_person
+        where user_id=#{userId}
+    </select>
+    <select id="selectLegalPlantCodeCount" resultType="java.lang.Integer">
+        select count(id) from legal_plant where legal_plant_code=#{legalPlantCode}
+    </select>
+    <select id="selectAllLegalPlantCondition" resultType="com.zk.legalPlant.bean.LegalPlant">
+        select  lpt.id,lpt.legal_plant_code as legalPlantCode,lpt.legal_plant_dec as legalPlantDec,lpt.status as enabled,lpt.legal_person_code as legalPersonCode,lp.legal_person_name as legalPersonName ,lpt.version as version from legal_plant lpt
+        left join legal_person lp on lp.legal_person_code=lpt.legal_person_code
+        <where>
+            <if test="enabled!=null ">
+                and lpt.status like concat('%',#{enabled},'%')
+            </if>
+            <if test="legalPersonCode!=null and legalPersonCode!=''">
+                and lp.legal_person_code = #{legalPersonCode}
+            </if>
+            <if test="legalPlantCode!=null and legalPlantCode!=''">
+                and lpt.legal_plant_code  like concat('%',#{legalPlantCode},'%')
+            </if>
+            <if test="legalPlantDec!=null and legalPlantDec!=''">
+                and lpt.legal_plant_dec  like concat('%',#{legalPlantDec},'%')
+            </if>
+        </where>
+        order by lpt.create_time
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="selectAllLegalPlantConditionCount" resultType="java.lang.Integer">
+
+        select count(lpt.id) from legal_plant lpt
+        left join legal_person lp on lp.legal_person_code=lpt.legal_plant_code
+        <where>
+            <if test="enabled!=null ">
+                and lpt.status like concat('%',#{enabled},'%')
+            </if>
+            <if test="legalPersonCode!=null and legalPersonCode!=''">
+                and lp.legal_person_code = #{legalPersonCode}
+            </if>
+            <if test="legalPlantCode!=null and legalPlantCode!=''">
+                and lpt.legal_plant_code  like concat('%',#{legalPlantCode},'%')
+            </if>
+            <if test="legalPlantDec!=null and legalPlantDec!=''">
+                and lpt.legal_plant_dec  like concat('%',#{legalPlantDec},'%')
+            </if>
+        </where>
+
+    </select>
+</mapper>

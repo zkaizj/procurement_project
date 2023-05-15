@@ -3,12 +3,10 @@ package com.zk.subClass.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.zk.subClass.bean.AddBigSpare;
-import com.zk.subClass.bean.BigSpare;
-import com.zk.subClass.bean.PageVo;
+import com.zk.subClass.bean.*;
 import com.zk.subClass.mapper.BigSpareMapper;
 import com.zk.subClass.service.BigSpareService;
-import com.zk.subClass.util.ResultVo;
+import com.zk.commen.util.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,18 +46,27 @@ implements BigSpareService {
     }
 
     //分页查询
-    public PageVo<BigSpare> queryAllBigSpares(Map<String, Object> map){
+    public PageVo<BigSpare> queryAllBigSpares(BigSpareVo bigSpareVo){
+
         //分页第一个参数
-        map.put("offset",(((int)map.get("pageIndex")-1)*(int)map.get("pageSize")));
+        bigSpareVo.setOffset((bigSpareVo.getPageIndex()-1)*bigSpareVo.getPageSize());
          //查询所有数据
-        List<BigSpare> bigSpareList = bigSpareMapper.queryAllBigSpares(map);
+        List<BigSpare> bigSpareList = bigSpareMapper.queryAllBigSpares(bigSpareVo);
         //查询数据量
-        int count=bigSpareMapper.queryAllBigSparesCount(map);
+        int count=bigSpareMapper.queryAllBigSparesCount(bigSpareVo);
+        //根据状态码给状态命名
+        for (BigSpare bs:bigSpareList) {
+            if (bs.getStatus()){
+                bs.setStatusName("启用");
+            }else {
+                bs.setStatusName("禁用");
+            }
+        }
 
         PageVo<BigSpare> pageVo = new PageVo<>();
         pageVo.setDataList(bigSpareList);
-        pageVo.setCurrentPage((int)map.get("pageIndex"));
-        pageVo.setTotalPage(count%(int)map.get("pageSize")==0?count/(int)map.get("pageSize"):count/(int)map.get("pageSize")+1);
+        pageVo.setCurrentPage(bigSpareVo.getPageIndex());
+        pageVo.setTotalPage(count%bigSpareVo.getPageSize()==0?count/bigSpareVo.getPageSize():count/bigSpareVo.getPageSize()+1);
         pageVo.setTotalNumber(count);
         return pageVo;
     }
@@ -71,5 +78,32 @@ implements BigSpareService {
         map.put("updataPeople","zk");
 
         return bigSpareMapper.updateStatus(map)>0;
+    }
+
+    @Override
+    public ResultVo updateBigSpare(UpdateBigSpareVo updateBigSpare) {
+        //查询状态是否为启用
+        boolean status=bigSpareMapper.selectStatus(updateBigSpare.getId());
+        if (status){
+            return ResultVo.error("当前状态为启用，不能修改");
+        }else {
+            //查询名称是否重复
+            int count = bigSpareMapper.selectNameGT0(updateBigSpare.getId(), updateBigSpare.getName());
+            if (count > 0) {
+                return ResultVo.error("名称重复");
+            } else {
+                //查询版本号是否一致
+
+                updateBigSpare.setModifyPeople("zk");
+                int tag = bigSpareMapper.updateBigSpare(updateBigSpare);
+                if (tag > 0) {
+                    return ResultVo.success("修改成功");
+                } else {
+                    return ResultVo.error("版本号不一致，请重试");
+                }
+
+            }
+        }
+
     }
 }

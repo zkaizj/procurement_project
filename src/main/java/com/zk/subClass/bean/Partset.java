@@ -22,6 +22,8 @@ public class Partset implements Serializable {
 
     private Boolean status;
 
+    private String statusName;
+
     private Integer version;
 
     private Date createDate;

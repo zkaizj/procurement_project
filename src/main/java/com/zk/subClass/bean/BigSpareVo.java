@@ -8,7 +8,7 @@ import lombok.Data;
  * @description PartsetVo
  */
 @Data
-public class PartsetVo {
+public class BigSpareVo {
     //页码
     private int pageIndex;
     //每页条数

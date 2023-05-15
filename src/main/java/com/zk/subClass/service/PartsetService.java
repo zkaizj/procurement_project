@@ -2,7 +2,7 @@ package com.zk.subClass.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.zk.subClass.bean.*;
-import com.zk.subClass.util.ResultVo;
+import com.zk.commen.util.ResultVo;
 
 /**
  * @author ZK
@@ -18,5 +18,5 @@ public interface PartsetService extends IService<Partset> {
 
     boolean updateStatus(StatusVo statusVo);
 
-    boolean modifySubClass(UpDateSubClassVo upDateSubClassVo);
+    ResultVo modifySubClass(UpDateSubClassVo upDateSubClassVo);
 }

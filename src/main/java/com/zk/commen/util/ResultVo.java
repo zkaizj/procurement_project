@@ -1,4 +1,4 @@
-package com.zk.subClass.util;
+package com.zk.commen.util;
 
 import lombok.Data;
 
@@ -30,6 +30,11 @@ public class ResultVo<T> {
         ResultVo<T> returnObj = new ResultVo<>();
         returnObj.setSuccess(true);
         returnObj.setData(data);
+        return returnObj;
+    }
+    public static<T> ResultVo<T> success() {
+        ResultVo<T> returnObj = new ResultVo<>();
+        returnObj.setSuccess(true);
         return returnObj;
     }
 }

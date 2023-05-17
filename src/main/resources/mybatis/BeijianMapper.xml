@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zk.beijian.mapper.BeijianMapper">
+
+    <resultMap id="BaseResultMap" type="com.zk.beijian.bean.Beijian">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="subclassId" column="subclass_id" jdbcType="INTEGER"/>
+            <result property="planclassId" column="planclass_id" jdbcType="INTEGER"/>
+            <result property="legalPersonCode" column="legal_person_code" jdbcType="VARCHAR"/>
+            <result property="version" column="version" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createPeople" column="create_people" jdbcType="VARCHAR"/>
+            <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+            <result property="modifyPeople" column="modify_people" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,name,code,
+        status,remark,subclass_id,
+        planclass_id,legal_person_code,version,
+        create_time,create_people,modify_time,
+        modify_people,user_id
+    </sql>
+  <insert id="addBeiJian" useGeneratedKeys="true" keyProperty="id">
+        insert into beijian(name, code, subclass_id, planclass_id,
+                            create_time, create_people,
+                            modify_time, modify_people, user_id)
+                            values(#{name},#{code},#{subClassId},#{planClassId},
+                           sysdate(),#{createPeople},
+                            sysdate(),#{modifyPeople},#{userId})
+    </insert>
+    <insert id="addRelations">
+
+        insert into beijian_legalperson (bei_id, legal_person_id)
+        values 
+        <foreach collection="legalPersonIds" separator="," item="legalPersonId">
+            (#{beiId},#{legalPersonId})
+        </foreach>
+    </insert>
+    <!--<insert id="addBeiJian">
+        insert into beijian(name, code, subclass_id, planclass_id,
+                            legal_person_code, create_time, create_people,
+                            modify_time, modify_people, user_id, legal_person_id)
+        values
+        <foreach collection="addBeiVo.legalPersonIds" item="legalPersonId" separator="," >
+            (#{addBeiVo.name},#{addBeiVo.code},#{addBeiVo.subClassId},#{addBeiVo.planClassId},
+            #{addBeiVo.legalPersonCode},sysdate(),#{addBeiVo.createPeople},
+            sysdate(),#{addBeiVo.modifyPeople},#{addBeiVo.userId},#{legalPersonId})
+        </foreach>
+    </insert>-->
+    <update id="updateBeiStatus">
+        update beijian set status=#{status} ,modify_people=#{modifyPeople},modify_time=sysdate()
+        ,version=version+1
+        where id=#{id}
+    </update>
+    <update id="updateBeiJian">
+        update beijian set name=#{name} ,modify_people=#{modifyPeople},modify_time=#{modifyTime},status=#{status}
+        where id=#{id}
+    </update>
+    <delete id="deleteRelationsById">
+        delete from beijian_legalperson where bei_id=#{beiId}
+    </delete>
+    <select id="queryAllBeiJian" resultType="com.zk.beijian.bean.BeiJianVo">
+        select  beijian.id,beijian.name,beijian.code,beijian.status,beijian.version,p.name as subClassName ,bs.name as planClassName,lp.legal_person_name as legalPersonNames from beijian
+        join partset p on beijian.subclass_id = p.id
+        join big_spare bs on bs.id = beijian.planclass_id
+        join beijian_legalperson bl on beijian.id = bl.bei_id
+        join legal_person lp on bl.legal_person_id = lp.id
+        <where>
+            <if test="code!=null and code!=''">
+                and beijian.code like concat('%',#{code},'%')
+            </if>
+            <if test="name!=null and name!=''">
+                and beijian.name  like concat('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                and beijian.status=#{status}
+            </if>
+        </where>
+        order by beijian.create_time
+        limit #{offset},#{pageSize}
+    </select>
+    <select id="queryAllCount" resultType="java.lang.Integer">
+        select  count(beijian.id) from beijian
+        join partset p on beijian.subclass_id = p.id
+        join big_spare bs on bs.id = beijian.planclass_id
+        join beijian_legalperson bl on beijian.id = bl.bei_id
+        join legal_person lp on bl.legal_person_id = lp.id
+        <where>
+            <if test="code!=null and code!=''">
+                and beijian.code like concat('%',#{code},'%')
+            </if>
+            <if test="name!=null and name!=''">
+                and beijian.name  like concat('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                and beijian.status=#{status}
+            </if>
+        </where>
+    </select>
+    <select id="selectCodeNum" resultType="java.lang.Integer">
+        select count(id) from beijian where code=#{code}
+    </select>
+    <select id="selectNameNum" resultType="java.lang.Integer">
+        select count(id) from beijian where name=#{name}
+    </select>
+    <select id="selectLegalPersonCode" resultType="java.lang.String">
+        select legal_person_code from legal_person where id=#{legalPersonId}
+    </select>
+    <select id="selectNameNumById" resultType="java.lang.Integer">
+        select count(id) from beijian where name=#{name} and id!=#{beiId}
+    </select>
+</mapper>

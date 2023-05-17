@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatusVo {
-    private Boolean status;
-    private String StatusName;
+    private Boolean value;
+    private String label;
 }

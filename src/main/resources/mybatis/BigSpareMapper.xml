@@ -91,4 +91,7 @@
     <select id="selectNameGT0" resultType="java.lang.Integer">
         select Count(*) from big_spare where id!=#{id} and name=#{name}
     </select>
+    <select id="selectAllByUserId" resultType="com.zk.commen.BigVo">
+        select id,name from big_spare where user_id=#{id}
+    </select>
 </mapper>

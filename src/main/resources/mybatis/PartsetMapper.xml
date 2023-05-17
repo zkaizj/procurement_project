@@ -15,6 +15,7 @@
             <result property="createPeople" column="create_people" jdbcType="VARCHAR"/>
             <result property="modifyDate" column="modify_date" jdbcType="TIMESTAMP"/>
             <result property="modifyPeople" column="modify_people" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -95,8 +96,11 @@
     <select id="selectStatusById" resultType="java.lang.Boolean">
         select status from partset where id=#{id}
     </select>
-    <select id="selectPartNameById" resultType="com.zk.subClass.bean.Partset">
+    <select id="selectPartNameById" resultType="java.lang.Integer">
         select Count(id) from partset where id!=#{id} and name=#{name}
+    </select>
+    <select id="selectAllByUserId" resultType="com.zk.commen.PartVo">
+        select id ,name from partset where user_id=#{id};
     </select>
 
 </mapper>

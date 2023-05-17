@@ -49,7 +49,7 @@ public class PartsetController {
 
     }
     //修改备件小类信息
-    @PostMapping("/update")
+    @PostMapping("/modifySubClass")
     public ResultVo updateSubClass(@RequestBody UpDateSubClassVo upDateSubClassVo) {
 
         return partsetService.modifySubClass(upDateSubClassVo);

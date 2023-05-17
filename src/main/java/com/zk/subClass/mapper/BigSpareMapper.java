@@ -1,6 +1,7 @@
 package com.zk.subClass.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zk.commen.BigVo;
 import com.zk.subClass.bean.AddBigSpare;
 import com.zk.subClass.bean.BigSpare;
 import com.zk.subClass.bean.BigSpareVo;
@@ -35,4 +36,6 @@ public interface BigSpareMapper extends BaseMapper<BigSpare> {
     boolean selectStatus(Integer id);
 
     int selectNameGT0(@Param("id") Integer id,@Param("name") String name);
+
+    List<BigVo> selectAllByUserId(int id);
 }

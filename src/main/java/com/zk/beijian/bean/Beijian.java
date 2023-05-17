@@ -1,4 +1,4 @@
-package com.zk.subClass.bean;
+package com.zk.beijian.bean;
 
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.Data;
@@ -7,30 +7,34 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @TableName partset
+ * @TableName beijian
  */
-@TableName(value ="partset")
+@TableName(value ="beijian")
 @Data
-public class Partset implements Serializable {
+public class Beijian implements Serializable {
     private Integer id;
 
     private String name;
 
     private String code;
 
+    private Integer status;
+
     private String remark;
 
-    private Boolean status;
+    private Integer subclassId;
 
-    private String statusName;
+    private Integer planclassId;
+
+    private String legalPersonCode;
 
     private Integer version;
 
-    private Date createDate;
+    private Date createTime;
 
     private String createPeople;
 
-    private Date modifyDate;
+    private Date modifyTime;
 
     private String modifyPeople;
 

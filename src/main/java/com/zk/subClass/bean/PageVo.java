@@ -12,11 +12,11 @@ import java.util.List;
 @Data
 public class PageVo<T> {
 
-    // 总条数
+    // 总页数
     private Integer  totalPage;
     // 当前页
     private Integer  currentPage;
-    //每页条数
+    //数据条数（总数据）
     private Integer totalNumber;
     // 集合信息
     private List<T> dataList;

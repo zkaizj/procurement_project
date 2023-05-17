@@ -2,6 +2,7 @@ package com.zk.subClass.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zk.commen.PartVo;
 import com.zk.subClass.bean.AddSubClassVo;
 import com.zk.subClass.bean.Partset;
 import com.zk.subClass.bean.PartsetVo;
@@ -37,6 +38,8 @@ public interface PartsetMapper extends BaseMapper<Partset> {
     Boolean selectStatusById(Integer id);
 
     int selectPartNameById(@Param("id") Integer id,@Param("name") String name);
+
+    List<PartVo> selectAllByUserId(int userId);
 
 
 //    int selectPartCode(String partCode);
